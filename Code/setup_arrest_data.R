@@ -75,4 +75,8 @@ SC_for_analysis <- SC_after_exclusions %>%
 SC_for_analysis$dang_days2 <- SC_for_analysis$dangerous_days
 SC_for_analysis$dang_days2[SC_for_analysis$dang_days2 == "Independence day"] <- "Other day"
 
-write.csv(SC_for_analysis, "arrests.csv", row.names = F) ## we'll use this nice dataset
+save(SC_for_analysis, file = "arrests.Rdata" ) ## we'll use this nice dataset
+
+## saving it as Rdata to keep it small enough to go on GitHub
+## will load with this name
+
