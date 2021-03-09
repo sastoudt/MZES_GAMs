@@ -169,31 +169,60 @@
 
 
 \begin{frame}
-\frametitle{Linear Model}
+\frametitle{Linear Model - \texttt{lm}}
+
+\begin{multicols}{2}
 
 $$ Y = X\beta +  \epsilon $$
+
+$$\text{daily number of stops} \sim \beta_{driverRace} + $$
+$$\beta_{isPostPolicy}+ \beta_{driverRace, isPostPolicy}+$$
+$$ \beta_{dayOfWeek} + \beta*\text{month} $$
 
 Choices:
 
 \begin{itemize}
 \item which covariates $X$ to use
 \end{itemize}
+
+\columnbreak
+
+\begin{figure}
+\includegraphics[scale=.3]{figures/lmResults}
+\end{figure}
+
+\end{multicols}
 
 
 \end{frame}
 
 \begin{frame}
-\frametitle{Generalized Linear Model}
+\frametitle{Generalized Linear Model - \texttt{glm}}
+
+\begin{multicols}{2}
 
 $$ E[Y] \sim g^{-1}(X\beta) $$
 $$ g(E[Y]) \sim X\beta $$
+
+$$g(\text{daily number of stops}) \sim \beta_{driverRace} + $$
+$$\beta_{isPostPolicy}+ \beta_{driverRace, isPostPolicy}+$$
+$$ \beta_{dayOfWeek} + \beta*\text{month} $$
+
 
 Choices:
 
 \begin{itemize}
 \item which covariates $X$ to use
-\item response distribution and link function $g$
+\item response distribution (\texttt{quasipoisson}) and link function $g$
 \end{itemize}
+
+\columnbreak
+
+\begin{figure}
+\includegraphics[scale=.3]{figures/glmResults}
+\end{figure}
+
+\end{multicols}
 
 
 \end{frame}
@@ -205,7 +234,12 @@ Choices:
 
 \frametitle{Generalized Additive Models: Intuition}
 
-$$ g(E[Y]) = X\beta + f_1(x_{1i})+f_2(x_{2i})+f_3(x_{3i},x_{4i})+... $$
+$$ g(E[Y]) = X\beta + f_1(x_{1i})+f_2(x_{2i})$$
+
+$$g(\text{daily number of stops}) \sim \beta_{driverRace} + $$
+$$\beta_{isPostPolicy}+ \beta_{driverRace, isPostPolicy}+$$
+$$ f_1(\text{dayOfWeek}) + f_2(\text{month}) $$
+
 
 Choices: 
 \begin{itemize}
@@ -215,7 +249,7 @@ Choices:
 \item dimension of basis
 \item smoothing parameter
 \end{itemize}
-\vspace{.5in}
+
 \footnotesize{*Simon N. Wood. \textit{Generalized Additive Models: An Introduction with R.} Chapman and Hall/CRC, 2006.}
 \end{frame}
 
@@ -229,21 +263,6 @@ Choices:
 \end{frame}
 
 
-\begin{frame}
-\frametitle{GAM: Parameter Intuition}
-
-\small{
-\begin{align*}
- f(x)&=\sum \limits_{i=1}^q a_i(x) \alpha_k\\
-f(x,z)&= \sum \beta_i(z) a_i(x) = \sum_i \sum_j \beta_{ij} b_j(z) a_i(x) \\
-\end{align*}}
-\vspace{-.3in}
-\begin{figure}
-\includegraphics[scale=.25]{figures/tensorProductViz}
-
-\end{figure}
-
-\end{frame}
 
 
 
@@ -255,6 +274,36 @@ f(x,z)&= \sum \beta_i(z) a_i(x) = \sum_i \sum_j \beta_{ij} b_j(z) a_i(x) \\
 % penalizes ``wiggliness"
 \end{figure}
 \end{frame}
+
+\begin{frame}
+\frametitle{Generalized Additive Model - \texttt{mgcv::gam}}
+
+\begin{multicols}{2}
+$$g(\text{daily number of stops}) \sim \beta_{driverRace} + $$
+$$\beta_{isPostPolicy}+ \beta_{driverRace, isPostPolicy}+$$
+$$ f_1(\text{dayOfWeek}) + f_2(\text{month}) $$
+
+Choices:
+
+\begin{itemize}
+\item which covariates $X$ to use
+\item response distribution (\texttt{quasipoisson}) and link function $g$
+\item type of basis that defines $f_i$
+\item dimension of basis
+\item smoothing parameter (default: GCV)
+\end{itemize}
+
+\columnbreak
+
+\begin{figure}
+\includegraphics[scale=.3]{figures/gamResults}
+\end{figure}
+
+\end{multicols}
+
+
+\end{frame}
+
 
 
 
@@ -275,6 +324,23 @@ f(x,z)&= \sum \beta_i(z) a_i(x) = \sum_i \sum_j \beta_{ij} b_j(z) a_i(x) \\
 \item \url{https://github.com/corinne-riddell/SCarolinaTrafficStops}
 
 \end{itemize}
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{GAM: Parameter Intuition}
+
+\small{
+\begin{align*}
+ f(x)&=\sum \limits_{i=1}^q a_i(x) \alpha_k\\
+f(x,z)&= \sum \beta_i(z) a_i(x) = \sum_i \sum_j \beta_{ij} b_j(z) a_i(x) \\
+\end{align*}}
+\vspace{-.3in}
+\begin{figure}
+\includegraphics[scale=.25]{figures/tensorProductViz}
+
+\end{figure}
 
 \end{frame}
 
