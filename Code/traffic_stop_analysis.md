@@ -227,5 +227,116 @@ ggplot(data, aes(x = date2, y = daily_num_stops)) +
 ![](traffic_stop_analysis_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
 
 ``` r
-data$doy= yday(data$stop_date) 
+plot(generalized_additive_model, rug = T)
 ```
+
+![](traffic_stop_analysis_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->![](traffic_stop_analysis_files/figure-gfm/unnamed-chunk-10-2.png)<!-- -->
+
+``` r
+gam.check(generalized_additive_model)
+```
+
+![](traffic_stop_analysis_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
+
+    ## 
+    ## Method: GCV   Optimizer: outer newton
+    ## full convergence after 7 iterations.
+    ## Gradient range [2.276484e-07,0.0001085462]
+    ## (score 67.12864 & scale 69.71227).
+    ## Hessian positive definite, eigenvalue range [0.0006598969,0.01185808].
+    ## Model rank =  16 / 16 
+    ## 
+    ## Basis dimension (k) checking results. Low p-value (k-index<1) may
+    ## indicate that k is too low, especially if edf is close to k'.
+    ## 
+    ##                      k'  edf k-index p-value
+    ## s(day_of_week_num) 2.00 1.98    1.53       1
+    ## s(month)           8.00 6.95    1.50       1
+
+``` r
+## Slide 14
+data$doy <- yday(data$stop_date)
+
+generalized_additive_model2 <- gam(daily_num_stops ~ driver_race + post_policy + driver_race * post_policy + s(doy, bs = "cc") + s(day, bs = "cc") + s(day_of_week_num, bs = "cc", k = 4), data = data, family = "quasipoisson")
+
+summary(generalized_additive_model2)
+```
+
+    ## 
+    ## Family: quasipoisson 
+    ## Link function: log 
+    ## 
+    ## Formula:
+    ## daily_num_stops ~ driver_race + post_policy + driver_race * post_policy + 
+    ##     s(doy, bs = "cc") + s(day, bs = "cc") + s(day_of_week_num, 
+    ##     bs = "cc", k = 4)
+    ## 
+    ## Parametric coefficients:
+    ##                                 Estimate Std. Error t value Pr(>|t|)    
+    ## (Intercept)                      5.30597    0.02222 238.807   <2e-16 ***
+    ## driver_raceHispanic             -1.99748    0.06417 -31.127   <2e-16 ***
+    ## driver_raceWhite                 0.69885    0.02712  25.767   <2e-16 ***
+    ## post_policy                      0.29623    0.02858  10.365   <2e-16 ***
+    ## driver_raceHispanic:post_policy  0.02936    0.08205   0.358    0.721    
+    ## driver_raceWhite:post_policy    -0.03792    0.03495  -1.085    0.278    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## Approximate significance of smooth terms:
+    ##                      edf Ref.df       F  p-value    
+    ## s(doy)             5.028      8   3.415 1.47e-05 ***
+    ## s(day)             7.327      8   5.118 1.81e-06 ***
+    ## s(day_of_week_num) 1.985      2 121.806  < 2e-16 ***
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## R-sq.(adj) =  0.579   Deviance explained = 71.1%
+    ## GCV = 66.471  Scale est. = 68.204    n = 4379
+
+``` r
+data$predGAM2 <- predict(generalized_additive_model2, type = "response")
+```
+
+``` r
+ggplot(data, aes(x = date2, y = daily_num_stops)) +
+  facet_wrap(~race, scales = "free_y", ncol = 1) +
+  geom_point() +
+  geom_line(aes(date2, predGAM2, col = day_of_week)) +
+  geom_vline(xintercept = as.Date("2005-12-09"), lty = 2) +
+  theme_minimal(base_size = 14) +
+  theme(
+    legend.title = element_blank(), # legend.position = "bottom" #,
+    axis.text.x = element_text(angle = 30, hjust = 1)
+  ) +
+  labs(y = "Number of stops", x = "")
+```
+
+![](traffic_stop_analysis_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
+
+``` r
+plot(generalized_additive_model2, rug = T)
+```
+
+![](traffic_stop_analysis_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->![](traffic_stop_analysis_files/figure-gfm/unnamed-chunk-14-2.png)<!-- -->![](traffic_stop_analysis_files/figure-gfm/unnamed-chunk-14-3.png)<!-- -->
+
+``` r
+gam.check(generalized_additive_model2)
+```
+
+![](traffic_stop_analysis_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
+
+    ## 
+    ## Method: GCV   Optimizer: outer newton
+    ## full convergence after 9 iterations.
+    ## Gradient range [-3.923895e-07,9.121654e-05]
+    ## (score 66.47101 & scale 68.20418).
+    ## Hessian positive definite, eigenvalue range [0.0006512561,0.03602763].
+    ## Model rank =  24 / 24 
+    ## 
+    ## Basis dimension (k) checking results. Low p-value (k-index<1) may
+    ## indicate that k is too low, especially if edf is close to k'.
+    ## 
+    ##                      k'  edf k-index p-value
+    ## s(doy)             8.00 5.03    1.44       1
+    ## s(day)             8.00 7.33    1.57       1
+    ## s(day_of_week_num) 2.00 1.98    1.55       1

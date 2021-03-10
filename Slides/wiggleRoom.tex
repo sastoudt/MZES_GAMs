@@ -304,7 +304,96 @@ Choices:
 
 \end{frame}
 
+\begin{frame}
+\frametitle{Under the Hood - Cyclic Basis}
 
+\texttt{s(month, bs = "cc")}
+
+\begin{itemize}
+\item constrained to have the same beginning and end
+\item helpful for time components
+\item when you aren't in the mood to do a formal time series analysis
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Under the Hood - Choosing $k$}
+
+\begin{multicols}{2}
+\texttt{$s(day\_of\_week\_num, bs = "cc", k = 4)$}
+
+\begin{itemize}
+\item $k$ controls the maximum amount of flexibility
+\item bigger $k$ means more computational complexity
+\item constrained by how much data you have (R will yell at you if you try to go too big)
+\end{itemize}
+
+\columnbreak
+
+\texttt{gam.check(model)}
+
+\begin{itemize}
+\item there isn't one magic $k$, robust to choice of $k$ as long as in a reasonable range
+\item but did I pick a $k$ big enough?
+\item rough guide: small p-value means you could probably benefit from increasing $k$
+\end{itemize}
+
+\end{multicols}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Under the Hood - Seeing the Smooths}
+\begin{center}
+\texttt{plot(model, rug = T)}
+\end{center}
+
+\begin{figure}
+\includegraphics[scale=.2]{figures/exampleSmooth1}
+\includegraphics[scale=.2]{figures/exampleSmooth2}
+\end{figure}
+
+
+\end{frame}
+
+
+
+
+\begin{frame}
+\frametitle{Generalized Additive Model - \texttt{mgcv::gam}}
+
+\begin{multicols}{2}
+$$g(\text{daily number of stops}) \sim \beta_{driverRace} + $$
+$$\beta_{isPostPolicy}+ \beta_{driverRace, isPostPolicy}+$$
+$$ f_1(\text{dayOfWeek}) + f_2(\text{dayOfMonth})+ $$
+$$ f_3(\text{dayOfYear})$$
+
+
+\columnbreak
+
+\begin{figure}
+\includegraphics[scale=.3]{figures/gamResults2}
+\end{figure}
+
+\end{multicols}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{More Smooths}
+\begin{center}
+\texttt{plot(model, rug = T)}
+\end{center}
+
+\begin{figure}
+\includegraphics[scale=.2]{figures/exampleSmooth1b}
+\includegraphics[scale=.2]{figures/exampleSmooth2b}
+\end{figure}
+
+Are these wiggles ``real"?
+
+\end{frame}
 
 
 
