@@ -1,0 +1,96 @@
+---
+title: "Arrest Probability Analysis"
+author: "Sara Stoudt"
+date: "3/10/2021"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = F, message = F, fig.width=8, fig.height=8)
+```
+
+## Setup
+
+```{r}
+#install.packages("tidyverse") ## install if haven't already done so
+#install.pacakges("mgcv") ## install if haven't already done so
+#install.pacakges("lubridate") ## install if haven't already done so
+
+library(tidyverse)
+library(mgcv)
+library(lubridate)
+```
+
+```{r}
+load("../Data/arrests.Rdata") ## this will take a little time, it's a lot of data
+## resulting data will be called SC_for_analysis
+
+SC_for_analysis$day_of_week_num <- as.numeric(SC_for_analysis$day_of_week)
+SC_for_analysis$doy <- yday(SC_for_analysis$stop_date)
+
+dim(SC_for_analysis)
+```
+
+## First BAM 
+
+```{r}
+gam1 <- bam(
+  formula = arrest ~ race + driver_gender + s(driver_age) +
+    post_policy + race * post_policy,
+  data = SC_for_analysis,
+  family = "binomial"
+)
+summary(gam1)
+```
+
+```{r, cache = T}
+gam.check(gam1) ## now this is expensive, hm...
+```
+
+```{r}
+plot(gam1, rug = T)
+```
+
+## The Works
+
+```{r}
+gam2 <- bam(
+  formula = arrest ~ race + driver_gender + s(driver_age, bs = "cs") +
+    post_policy + race * post_policy +
+    s(doy, bs = "cs") + s(day, bs = "cs") + s(day_of_week_num, bs = "cs", k = 4),
+  data = SC_for_analysis,
+  family = "binomial"
+)
+
+summary(gam2)
+```
+
+```{r, cache = T}
+gam.check(gam2)
+```
+
+```{r}
+plot(gam2, rug = T)
+```
+
+## Two-Dimensional Smooths
+
+```{r}
+gam3 <- bam(
+  formula = arrest ~ race + driver_gender +
+    post_policy + race * post_policy +
+    te(lon, lat),
+  data = SC_for_analysis,
+  family = "binomial"
+)
+
+summary(gam3)
+```
+
+```{r, cache = T}
+gam.check(gam3)
+```
+
+```{r}
+plot(gam3, rug = T)
+```
