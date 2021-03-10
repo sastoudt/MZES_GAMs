@@ -98,6 +98,84 @@ plot(gam1, rug = T)
 
 ``` r
 gam2 <- bam(
+  formula = arrest ~ race + driver_gender + s(driver_age, bs = "cr") +
+    post_policy + race * post_policy +
+    s(doy, bs = "cc") + s(day, bs = "cc") + s(day_of_week_num, bs = "cc", k = 4),
+  data = SC_for_analysis,
+  family = "binomial"
+)
+
+summary(gam2)
+```
+
+    ## 
+    ## Family: binomial 
+    ## Link function: logit 
+    ## 
+    ## Formula:
+    ## arrest ~ race + driver_gender + s(driver_age, bs = "cr") + post_policy + 
+    ##     race * post_policy + s(doy, bs = "cc") + s(day, bs = "cc") + 
+    ##     s(day_of_week_num, bs = "cc", k = 4)
+    ## 
+    ## Parametric coefficients:
+    ##                          Estimate Std. Error  z value Pr(>|z|)    
+    ## (Intercept)              -4.99805    0.02212 -225.955  < 2e-16 ***
+    ## raceBlack                 0.44230    0.02205   20.057  < 2e-16 ***
+    ## raceHispanic              1.14455    0.03173   36.073  < 2e-16 ***
+    ## driver_genderM            1.21938    0.01902   64.098  < 2e-16 ***
+    ## post_policy              -0.01294    0.01873   -0.691  0.48964    
+    ## raceBlack:post_policy    -0.14216    0.02880   -4.935    8e-07 ***
+    ## raceHispanic:post_policy  0.11263    0.03976    2.833  0.00461 ** 
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## Approximate significance of smooth terms:
+    ##                      edf Ref.df  Chi.sq p-value    
+    ## s(driver_age)      7.349  7.792 1594.73  <2e-16 ***
+    ## s(doy)             6.369  8.000   70.90  <2e-16 ***
+    ## s(day)             6.562  8.000   40.58  <2e-16 ***
+    ## s(day_of_week_num) 1.979  2.000  211.67  <2e-16 ***
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## R-sq.(adj) =  0.0139   Deviance explained = 5.41%
+    ## fREML = 1.5517e+06  Scale est. = 1         n = 1090998
+
+``` r
+gam.check(gam2)
+```
+
+![](arrest_analysis_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+
+    ## 
+    ## Method: fREML   Optimizer: perf newton
+    ## full convergence after 5 iterations.
+    ## Gradient range [5.781809e-08,0.0002733084]
+    ## (score 1553285 & scale 1).
+    ## Hessian positive definite, eigenvalue range [0.4995186,3.648384].
+    ## Model rank =  37 / 37 
+    ## 
+    ## Basis dimension (k) checking results. Low p-value (k-index<1) may
+    ## indicate that k is too low, especially if edf is close to k'.
+    ## 
+    ##                      k'  edf k-index p-value  
+    ## s(driver_age)      9.00 7.32    0.92    0.06 .
+    ## s(doy)             9.00 6.87    0.93    0.40  
+    ## s(day)             9.00 5.14    0.96    0.99  
+    ## s(day_of_week_num) 3.00 2.94    0.93    0.28  
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+``` r
+plot(gam2, rug = T)
+```
+
+![](arrest_analysis_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->![](arrest_analysis_files/figure-gfm/unnamed-chunk-8-2.png)<!-- -->![](arrest_analysis_files/figure-gfm/unnamed-chunk-8-3.png)<!-- -->![](arrest_analysis_files/figure-gfm/unnamed-chunk-8-4.png)<!-- -->
+
+## The Works - Shrinkage
+
+``` r
+gam3 <- bam(
   formula = arrest ~ race + driver_gender + s(driver_age, bs = "cs") +
     post_policy + race * post_policy +
     s(doy, bs = "cs") + s(day, bs = "cs") + s(day_of_week_num, bs = "cs", k = 4),
@@ -105,7 +183,7 @@ gam2 <- bam(
   family = "binomial"
 )
 
-summary(gam2)
+summary(gam3)
 ```
 
     ## 
@@ -142,40 +220,37 @@ summary(gam2)
     ## fREML = 1.5533e+06  Scale est. = 1         n = 1090998
 
 ``` r
-gam.check(gam2)
+gam.check(gam3)
 ```
 
-![](arrest_analysis_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+![](arrest_analysis_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
 
     ## 
     ## Method: fREML   Optimizer: perf newton
-    ## full convergence after 5 iterations.
-    ## Gradient range [5.781809e-08,0.0002733084]
-    ## (score 1553285 & scale 1).
-    ## Hessian positive definite, eigenvalue range [0.4995186,3.648384].
-    ## Model rank =  37 / 37 
+    ## full convergence after 6 iterations.
+    ## Gradient range [3.131931e-07,2.1352e-05]
+    ## (score 429997.5 & scale 1).
+    ## Hessian positive definite, eigenvalue range [2.170075,3.098868].
+    ## Model rank =  31 / 31 
     ## 
     ## Basis dimension (k) checking results. Low p-value (k-index<1) may
     ## indicate that k is too low, especially if edf is close to k'.
     ## 
-    ##                      k'  edf k-index p-value  
-    ## s(driver_age)      9.00 7.32    0.92    0.06 .
-    ## s(doy)             9.00 6.87    0.93    0.40  
-    ## s(day)             9.00 5.14    0.96    0.99  
-    ## s(day_of_week_num) 3.00 2.94    0.93    0.28  
+    ##               k'  edf k-index p-value  
+    ## te(lon,lat) 24.0 21.3    0.84   0.025 *
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 ``` r
-plot(gam2, rug = T)
+plot(gam3, rug = T)
 ```
 
-![](arrest_analysis_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->![](arrest_analysis_files/figure-gfm/unnamed-chunk-8-2.png)<!-- -->![](arrest_analysis_files/figure-gfm/unnamed-chunk-8-3.png)<!-- -->![](arrest_analysis_files/figure-gfm/unnamed-chunk-8-4.png)<!-- -->
+![](arrest_analysis_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->![](arrest_analysis_files/figure-gfm/unnamed-chunk-11-2.png)<!-- -->![](arrest_analysis_files/figure-gfm/unnamed-chunk-11-3.png)<!-- -->![](arrest_analysis_files/figure-gfm/unnamed-chunk-11-4.png)<!-- -->
 
 ## Two-Dimensional Smooths
 
 ``` r
-gam3 <- bam(
+gam4 <- bam(
   formula = arrest ~ race + driver_gender +
     post_policy + race * post_policy +
     te(lon, lat),
@@ -183,7 +258,7 @@ gam3 <- bam(
   family = "binomial"
 )
 
-summary(gam3)
+summary(gam4)
 ```
 
     ## 
@@ -216,10 +291,16 @@ summary(gam3)
     ## fREML = 4.3e+05  Scale est. = 1         n = 301997
 
 ``` r
-gam.check(gam3)
+toPlot <- SC_for_analysis %>% filter(!is.na(lon) & !is.na(lat))
+
+toPlot$predSpatial <- predict(gam4, newdata = toPlot, type="response")
 ```
 
-![](arrest_analysis_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
+``` r
+gam.check(gam4)
+```
+
+![](arrest_analysis_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
 
     ## 
     ## Method: fREML   Optimizer: perf newton
@@ -233,12 +314,40 @@ gam.check(gam3)
     ## indicate that k is too low, especially if edf is close to k'.
     ## 
     ##               k'  edf k-index p-value  
-    ## te(lon,lat) 24.0 21.3    0.84   0.025 *
+    ## te(lon,lat) 24.0 21.3    0.89    0.08 .
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 ``` r
-plot(gam3, rug = T)
+plot(gam4, rug = T)
 ```
 
-![](arrest_analysis_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
+![](arrest_analysis_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
+
+``` r
+ggplot(subset(toPlot, predSpatial < 0.05), aes(lon, lat, col = predSpatial)) +
+  geom_point(alpha = 0.5) +
+  theme_minimal(base_size = 14) +
+  theme(
+    legend.title = element_blank(), # legend.position = "bottom" #,
+    axis.text.x = element_text(angle = 30, hjust = 1)
+  ) +
+  ggtitle("Predicted Arrest Probability < 0.05")
+```
+
+![](arrest_analysis_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
+
+``` r
+ggplot(subset(toPlot, predSpatial >= 0.05), aes(lon, lat, col = predSpatial)) +
+  geom_point(alpha = 0.5) +
+  theme_minimal(base_size = 14) +
+  theme(
+    legend.title = element_blank(), # legend.position = "bottom" #,
+    axis.text.x = element_text(angle = 30, hjust = 1)
+  ) +
+  ggtitle("Predicted Arrest Probability >= 0.05")
+```
+
+![](arrest_analysis_files/figure-gfm/unnamed-chunk-15-2.png)<!-- -->
+
+## Decomposition

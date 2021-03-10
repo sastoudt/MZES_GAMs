@@ -395,8 +395,6 @@ Are these wiggles ``real"?
 
 \end{frame}
 
-
-
 \begin{frame}
 \frametitle{Setting the Scene}
 
@@ -416,6 +414,103 @@ Are these wiggles ``real"?
 
 \end{frame}
 
+\begin{frame}
+\frametitle{Big GAMs - \texttt{mgcv::bam}}
+
+
+\begin{multicols}{2}
+$$g(\text{arrest}) \sim \beta_{driverRace} + $$
+$$ \beta_{gender} + f_1(\text{age}, bs = "cr") +$$
+$$\beta_{isPostPolicy}+ \beta_{driverRace, isPostPolicy}$$
+
+
+\begin{itemize}
+\item response distribution (\texttt{binomial}) 
+\item link function $g$ (\texttt{logit})
+\end{itemize}
+
+\columnbreak
+
+\begin{figure}
+\includegraphics[scale=.2]{figures/smoothAge}
+\end{figure}
+
+\end{multicols}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Shrinkage Splines - \texttt{bs = "cs"}}
+
+
+\begin{multicols}{2}
+$$g(\text{arrest}) \sim \beta_{driverRace} + $$
+$$ \beta_{gender} + f_1(\text{age}) +$$
+$$\beta_{isPostPolicy}+ \beta_{driverRace, isPostPolicy}+$$
+$$ f_1(\text{dayOfWeek}) + f_2(\text{dayOfMonth})+ $$
+$$ f_3(\text{dayOfYear})$$
+
+
+\begin{itemize}
+\item response distribution (\texttt{binomial}) 
+\item link function $g$ (\texttt{logit})
+\end{itemize}
+
+\columnbreak
+
+\begin{figure}
+\includegraphics[scale=.2]{figures/smoothAge}
+\end{figure}
+
+\end{multicols}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Real wiggles?}
+
+\begin{figure}
+\includegraphics[scale=.13]{figures/og1}
+\includegraphics[scale=.13]{figures/shrinkage1}
+
+\includegraphics[scale=.13]{figures/og4}
+\includegraphics[scale=.13]{figures/shrinkage4}
+\end{figure}
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Subtle shrinkage happening...}
+
+\begin{figure}
+\includegraphics[scale=.28]{figures/zoomIn}
+\end{figure}
+
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Multidimensional Smoothing}
+
+\begin{multicols}{2}
+\texttt{te(lon, lat)}
+
+\begin{itemize}
+\item two-dimensional smooth
+\item helpful for spatial components
+\item when you aren't in the mood to do a formal spatial analysis
+\end{itemize}
+
+\columnbreak
+
+\begin{figure}
+\includegraphics[scale=0.2]{figures/spatialSmooth}
+\end{figure}
+
+\end{multicols}
+\end{frame}
 
 \begin{frame}
 \frametitle{GAM: Parameter Intuition}
@@ -432,6 +527,53 @@ f(x,z)&= \sum \beta_i(z) a_i(x) = \sum_i \sum_j \beta_{ij} b_j(z) a_i(x) \\
 \end{figure}
 
 \end{frame}
+
+\begin{frame}
+\frametitle{Spatial Predictions}
+
+\begin{figure}
+\includegraphics[scale=.2]{figures/spatialPredLow}
+\includegraphics[scale=.2]{figures/spatialPredHigh}
+\end{figure}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{More Resources}
+\begin{itemize}
+\item 
+\item 
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\LARGE
+
+\begin{center}
+\frametitle{Time to GAM-ify your own work?}
+Questions?
+
+\vspace{.2in}
+
+sstoudt@smith.edu
+
+\vspace{.2in}
+
+@sastoudt
+
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{I'll leave you with some other Wiggles...}
+
+\begin{figure}
+\includegraphics[scale=.4]{figures/wiggles}
+\caption{\url{https://www.youtube.com/watch?v=a13WnqsRc5g }}
+\end{figure}
+
+\end{frame}
+
 
 % end with some other wiggles 
 %https://www.youtube.com/watch?v=a13WnqsRc5g 

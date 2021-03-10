@@ -55,9 +55,9 @@ plot(gam1, rug = T)
 
 ```{r}
 gam2 <- bam(
-  formula = arrest ~ race + driver_gender + s(driver_age, bs = "cs") +
+  formula = arrest ~ race + driver_gender + s(driver_age, bs = "cr") +
     post_policy + race * post_policy +
-    s(doy, bs = "cs") + s(day, bs = "cs") + s(day_of_week_num, bs = "cs", k = 4),
+    s(doy, bs = "cc") + s(day, bs = "cc") + s(day_of_week_num, bs = "cc", k = 4),
   data = SC_for_analysis,
   family = "binomial"
 )
@@ -73,13 +73,14 @@ gam.check(gam2)
 plot(gam2, rug = T)
 ```
 
-## Two-Dimensional Smooths
+
+## The Works - Shrinkage
 
 ```{r}
 gam3 <- bam(
-  formula = arrest ~ race + driver_gender +
+  formula = arrest ~ race + driver_gender + s(driver_age, bs = "cs") +
     post_policy + race * post_policy +
-    te(lon, lat),
+    s(doy, bs = "cs") + s(day, bs = "cs") + s(day_of_week_num, bs = "cs", k = 4),
   data = SC_for_analysis,
   family = "binomial"
 )
@@ -94,3 +95,52 @@ gam.check(gam3)
 ```{r}
 plot(gam3, rug = T)
 ```
+
+## Two-Dimensional Smooths
+
+```{r}
+gam4 <- bam(
+  formula = arrest ~ race + driver_gender +
+    post_policy + race * post_policy +
+    te(lon, lat),
+  data = SC_for_analysis,
+  family = "binomial"
+)
+
+summary(gam4)
+
+toPlot <- SC_for_analysis %>% filter(!is.na(lon) & !is.na(lat))
+
+toPlot$predSpatial <- predict(gam4, newdata = toPlot, type="response")
+```
+
+```{r, cache = T}
+gam.check(gam4)
+```
+
+```{r}
+plot(gam4, rug = T)
+```
+
+```{r}
+ggplot(subset(toPlot, predSpatial < 0.05), aes(lon, lat, col = predSpatial)) +
+  geom_point(alpha = 0.5) +
+  theme_minimal(base_size = 14) +
+  theme(
+    legend.title = element_blank(), # legend.position = "bottom" #,
+    axis.text.x = element_text(angle = 30, hjust = 1)
+  ) +
+  ggtitle("Predicted Arrest Probability < 0.05")
+
+ggplot(subset(toPlot, predSpatial >= 0.05), aes(lon, lat, col = predSpatial)) +
+  geom_point(alpha = 0.5) +
+  theme_minimal(base_size = 14) +
+  theme(
+    legend.title = element_blank(), # legend.position = "bottom" #,
+    axis.text.x = element_text(angle = 30, hjust = 1)
+  ) +
+  ggtitle("Predicted Arrest Probability >= 0.05")
+```
+
+
+## Decomposition
