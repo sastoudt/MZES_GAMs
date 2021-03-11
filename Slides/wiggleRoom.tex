@@ -122,7 +122,11 @@
 \item statistics communication: co-authored a book \textit{Communicating with Data: The Art of Writing for Data Science} with Deborah Nolan
 \end{itemize}
 \end{itemize}
+
+Materials here: \url{https://github.com/sastoudt/MZES_GAMs}
+
 \end{frame}
+
 
 \begin{frame}
 \frametitle{GAMs in my work}
@@ -250,7 +254,7 @@ Choices:
 \item smoothing parameter
 \end{itemize}
 
-\footnotesize{*Simon N. Wood. \textit{Generalized Additive Models: An Introduction with R.} Chapman and Hall/CRC, 2006.}
+\footnotesize{*Simon N. Wood. \textit{Generalized Additive Models: An Introduction with R.} Chapman and Hall/CRC, 2017.}
 \end{frame}
 
 \begin{frame}
@@ -459,8 +463,10 @@ $$ f_3(\text{dayOfYear})$$
 \columnbreak
 
 \begin{figure}
-\includegraphics[scale=.2]{figures/smoothAge}
+\includegraphics[scale=.2]{figures/regularizationEx}
 \end{figure}
+
+\footnotesize{Figure credit: \url{http://alex.smola.org/teaching/cmu2013-10-701/slides/13_recitation_lasso.pdf}}
 
 \end{multicols}
 
@@ -539,10 +545,55 @@ f(x,z)&= \sum \beta_i(z) a_i(x) = \sum_i \sum_j \beta_{ij} b_j(z) a_i(x) \\
 \end{frame}
 
 \begin{frame}
+\frametitle{Decomposition}
+
+
+
+$$g(\text{arrest}) \sim \beta_{driverRace} +  \beta_{gender} + f_1(\text{age}) +\beta_{isPostPolicy}+ \beta_{driverRace, isPostPolicy}+$$
+$$ ti(\text{lon}) + ti(\text{lat})+ ti(\text{lon, lat})$$
+
+
+
+\begin{figure}
+\includegraphics[scale=.2]{figures/lon}
+\includegraphics[scale=.2]{figures/lat}
+
+\includegraphics[scale=.2]{figures/lonlat}
+\end{figure}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Decomposition}
+
+\begin{multicols}{2}
+
+\begin{figure}
+\includegraphics[scale=.1]{figures/lon}
+
+\includegraphics[scale=.1]{figures/lat}
+\end{figure}
+
+\columnbreak
+
+\begin{figure}
+\includegraphics[scale=.2]{figures/lonlat}
+\end{figure}
+
+\end{multicols}
+
+
+\end{frame}
+
+\begin{frame}
 \frametitle{More Resources}
 \begin{itemize}
-\item 
-\item 
+\item Simon N. Wood. \textit{Generalized Additive Models: An Introduction with R.} Chapman and Hall/CRC, 2017.
+\item \url{https://noamross.github.io/gams-in-r-course/}
+\item \url{http://environmentalcomputing.net/intro-to-gams/}
+\item \url{https://fromthebottomoftheheap.net/2021/02/02/random-effects-in-gams/}
+\item \url{https://www.tjmahr.com/random-effects-penalized-splines-same-thing/}
+\item many, many more...
 \end{itemize}
 \end{frame}
 

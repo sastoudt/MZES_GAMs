@@ -144,3 +144,21 @@ ggplot(subset(toPlot, predSpatial >= 0.05), aes(lon, lat, col = predSpatial)) +
 
 
 ## Decomposition
+
+```{r}
+gam5 <- bam(
+  formula = arrest ~ race + driver_gender +
+    post_policy + race * post_policy + ti(lon) + ti(lat) + ti(lon, lat),
+  data = SC_for_analysis,
+  family = "binomial"
+)
+
+```
+
+```{r, cache = T}
+gam.check(gam5)
+```
+
+```{r}
+plot(gam5, rug = T)
+```

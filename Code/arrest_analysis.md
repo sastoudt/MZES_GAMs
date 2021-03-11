@@ -351,3 +351,42 @@ ggplot(subset(toPlot, predSpatial >= 0.05), aes(lon, lat, col = predSpatial)) +
 ![](arrest_analysis_files/figure-gfm/unnamed-chunk-15-2.png)<!-- -->
 
 ## Decomposition
+
+``` r
+gam5 <- bam(
+  formula = arrest ~ race + driver_gender +
+    post_policy + race * post_policy + ti(lon) + ti(lat) + ti(lon, lat),
+  data = SC_for_analysis,
+  family = "binomial"
+)
+```
+
+``` r
+gam.check(gam5)
+```
+
+![](arrest_analysis_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
+
+    ## 
+    ## Method: fREML   Optimizer: perf newton
+    ## full convergence after 8 iterations.
+    ## Gradient range [-3.742093e-06,0.000407005]
+    ## (score 429887.7 & scale 1).
+    ## Hessian positive definite, eigenvalue range [0.8479302,2.386789].
+    ## Model rank =  31 / 31 
+    ## 
+    ## Basis dimension (k) checking results. Low p-value (k-index<1) may
+    ## indicate that k is too low, especially if edf is close to k'.
+    ## 
+    ##                k'   edf k-index p-value    
+    ## ti(lon)      4.00  3.77    0.87  <2e-16 ***
+    ## ti(lat)      4.00  3.69    0.89    0.04 *  
+    ## ti(lon,lat) 16.00 13.93    0.86    0.01 ** 
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+``` r
+plot(gam5, rug = T)
+```
+
+![](arrest_analysis_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->![](arrest_analysis_files/figure-gfm/unnamed-chunk-18-2.png)<!-- -->![](arrest_analysis_files/figure-gfm/unnamed-chunk-18-3.png)<!-- -->
