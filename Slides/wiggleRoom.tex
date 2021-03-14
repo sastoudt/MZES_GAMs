@@ -200,6 +200,21 @@ Choices:
 
 \end{frame}
 
+
+\begin{frame}
+\frametitle{Linear Model $\rightarrow$ Generalized Linear Model}
+
+\begin{figure}
+\includegraphics[scale=.3]{figures/linReg}\includegraphics[scale=.3]{figures/poisReg}
+\end{figure}
+
+
+Figure Credit: \url{https://towardsdatascience.com/generalized-linear-models-9cbf848bb8ab}
+
+
+\end{frame}
+
+
 \begin{frame}
 \frametitle{Generalized Linear Model - \texttt{glm}}
 
@@ -264,6 +279,8 @@ Choices:
 % others: cubic regression spline, thin plate regression spline
 \end{figure}
 
+Linear combination of specific curves $\approx$ general curve
+
 \end{frame}
 
 
@@ -278,6 +295,32 @@ Choices:
 % penalizes ``wiggliness"
 \end{figure}
 \end{frame}
+
+\begin{frame}
+\frametitle{Bias-Variance Tradeoff}
+
+\begin{figure}
+
+\includegraphics[scale=.35]{figures/biasVarianceTradeoff}
+
+\end{figure}
+
+
+Figure Credit: \url{https://towardsdatascience.com/understanding-the-bias-variance-tradeoff-165e6942b229}
+
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Choosing the Smoothing Parameter: Cross Validation}
+
+\begin{figure}
+\includegraphics[scale=.2]{figures/kfold}
+\includegraphics[scale=.28]{figures/residualsBest}
+\end{figure}
+\end{frame}
+
+
 
 \begin{frame}
 \frametitle{Generalized Additive Model - \texttt{mgcv::gam}}
@@ -410,13 +453,28 @@ Are these wiggles ``real"?
 
 \begin{itemize}
 
-\item ``Using change in a seat belt law to study racially-biased policing in South Carolina" by Corinne A Riddell, Jay S Kaufman, Jacqueline M Torres, and Sam Harper
+\item Figure credit: ``Using change in a seat belt law to study racially-biased policing in South Carolina" by Corinne A Riddell, Jay S Kaufman, Jacqueline M Torres, and Sam Harper
 
 \item \url{https://github.com/corinne-riddell/SCarolinaTrafficStops}
 
 \end{itemize}
 
 \end{frame}
+
+\begin{frame}
+\frametitle{Linear Model $\rightarrow$ Generalized Linear Model}
+
+\begin{figure}
+\includegraphics[scale=.4]{figures/logReg}
+
+\end{figure}
+
+
+Figure Credit: \url{https://towardsdatascience.com/generalized-linear-models-9cbf848bb8ab}
+
+
+\end{frame}
+
 
 \begin{frame}
 \frametitle{Big GAMs - \texttt{mgcv::bam}}
